@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./IERC20.sol"; // Импортируем интерфейс ERC20
+
+contract TokenMinter {
+    IERC20 private token; // Объявляем переменную для адреса контракта ERC20
+
+    event TokenMinted(address indexed to, uint256 amount); // Событие, генерируемое при чеканке токена
+
+    constructor(address tokenAddress) {
+        token = IERC20(tokenAddress); // Инициализируем переменную контракта ERC20
+    }
+
+    function mintToken(address to, uint256 amount) external {
+        require(msg.sender == owner, "Only owner can mint tokens"); // Проверяем, что вызывающий контракт является владельцем
+        token.mint(to, amount); // Вызываем функцию чеканки токена в контракте ERC20
+        emit TokenMinted(to, amount); // Генерируем событие чеканки токена
+    }
+}
